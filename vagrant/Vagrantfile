@@ -1,0 +1,60 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
+VAGRANTFILE_API_VERSION = "2"
+
+$script = <<SCRIPT
+	echo "BEGIN shell provisioner......"
+	sudo su
+	echo "<---- Installing LAMP"
+	apt-get update
+	apt-get install -y apache2 curl libcurl3 libcurl3-dev php5 php5-dev php-pear php5-curl
+	pear install Net_SMTP
+	echo "<---- Configuring LAMP"
+	# rm -rf /var/www
+	ln -s /vagrant_root /var/www/web
+	a2enmod rewrite
+	a2enmod include
+	a2enmod headers
+	a2enmod ssl
+	rm -rf /etc/apache2/sites-enabled/000-default
+	rm -rf /etc/apache2/sites-enabled/000-default-ssl
+	ln -s /vagrant/default /etc/apache2/sites-enabled/000-default
+	ln -s /vagrant/default-ssl /etc/apache2/sites-enabled/000-default-ssl
+	rm -rf /etc/apache2/httpd.conf
+	ln -s /vagrant/httpd.conf /etc/apache2/httpd.conf
+	service apache2 restart
+	echo "<---- Configuring NODE/MONGODB"
+
+    apt-key adv --keyserver keyserver.ubuntu.com --recv 7F0CEB10
+    echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' | sudo tee /etc/apt/sources.list.d/10gen.list
+
+	apt-get -y update
+	apt-get install -y python-software-properties git subversion memcached build-essential
+
+	# Add nodejs repo
+	add-apt-repository -y ppa:chris-lea/node.js
+	apt-get -y update
+
+	# Install nodejs
+	apt-get install -y nodejs
+
+	# Install latest stable version of MongoDB
+	apt-get install -y mongodb
+
+	# Install Mean.io -- stop apache. Comment to use apache instead.
+	service apache2 stop
+	npm install -g meanio 
+	npm install -g grunt-cli 
+
+	echo "END shell provisioner."
+SCRIPT
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.box = "hashicorp/precise64"
+  config.vm.network "private_network", ip: "192.168.33.19"
+  config.vm.synced_folder "../static", "/vagrant_root"
+  config.vm.synced_folder "../mean", "/vagrant_mean"
+  config.vm.provision "shell", inline: $script
+end

@@ -1,12 +1,107 @@
+<!doctype html>
+<!--[if lt IE 7 ]> <html class="ie ie6 ie-lt10 ie-lt9 ie-lt8 ie-lt7 no-js" lang="en"> <![endif]-->
+<!--[if IE 7 ]>    <html class="ie ie7 ie-lt10 ie-lt9 ie-lt8 no-js" lang="en"> <![endif]-->
+<!--[if IE 8 ]>    <html class="ie ie8 ie-lt10 ie-lt9 no-js" lang="en"> <![endif]-->
+<!--[if IE 9 ]>    <html class="ie ie9 ie-lt10 no-js" lang="en"> <![endif]-->
+<!--[if gt IE 9]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
 
-<!DOCTYPE html>
-<html>
-	<head>
-		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-		<title></title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<title></title>
+	<meta name="author" content="" />
+	<meta name="description" content="" />
+	<meta name="google-site-verification" content="" />
+	<meta name="Copyright" content="" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="shortcut icon" href="favicon.ico" />
+	<link href='http://fonts.googleapis.com/css?family=Lato:300,400,700|Hind:400,700' rel='stylesheet' type='text/css'>	
+	<link rel="stylesheet" href="/common/css/reset.css" />
+	<link rel="stylesheet" href="/common/css/grid.css" />
+	<link rel="stylesheet" href="/common/css/style.css" />
+	
+	<!-- script src="/common/js/libs/prefixfree.min.js"></script -->
+	<meta name="application-name" content="" /> 
+	<meta name="msapplication-TileColor" content="" /> 
+	<meta name="msapplication-TileImage" content="" />
+	<meta name="msapplication-square150x150logo" content="" />
+	<meta name="msapplication-square310x310logo" content="" />
+	<meta name="msapplication-square70x70logo" content="" />
+	<meta name="msapplication-wide310x150logo" content="" />
+	<meta name="twitter:card" content="">
+	<meta name="twitter:site" content="">
+	<meta name="twitter:title" content="">
+	<meta name="twitter:description" content="">
+	<meta name="twitter:url" content="">
+	<meta property="og:title" content="" />
+	<meta property="og:description" content="" />
+	<meta property="og:url" content="" />
+	<meta property="og:image" content="" />
+
+</head>
+
+<body>
+
+<div class="wrapper">
+
+	<header>
 		
-	</head>
-	<body>
-		<h1>Test</h1>
-	</body>
+		<h1><a href="/">Experiment Directory</a></h1>
+		
+	</header>
+	
+	<article id="directory">
+		
+	
+	</article>
+		
+	<footer>
+		
+		<p><small>&copy; Copyright Keegan Brown 2014. All Rights Reserved.</small></p>
+		
+	</footer>
+
+</div>
+
+<script src="/common/js/libs/jquery-1.11.1.min.js"></script>
+
+<!-- this is where we put our custom functions -->
+<!-- don't forget to concatenate and minify if needed -->
+<script src="/common/js/functions.js"></script>
+<script>
+	$(function () {
+		$.ajax({
+			url: '/experiments/',
+			success: function (data) {
+				$context = $(data);
+				var output = [];
+				var filter = location.protocol+'//'+location.hostname;
+				$context.find('td a[href!="/"]').each(function (i,ele) {
+					output.push('<a href="/experiments'+ele.href.replace(filter,'')+'">Experiment '+(i+1)+'</a>');
+				})
+				$('#directory').html( output.join(' ') );
+			}
+		});
+	});
+</script>
+
+<!-- Asynchronous google analytics; this is the official snippet.
+	 Replace UA-XXXXXX-XX with your site's ID and uncomment to enable.
+	 
+<script>
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-XXXXXX-XX']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+-->
+  
+</body>
 </html>
